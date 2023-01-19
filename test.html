@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>test page</title>
+	</head>
+	<body>
+		这是 test 页面
+		<script src="js/moment.js"></script>
+		<script>
+			let times = ["2:30:10", "10:15", "2:20"]
+			let sum = moment.duration("00:00:00");
+
+			for (let i = 0; i < times.length; i++) {
+				if (times[i].length <= 5) {
+					times[i] = "0:" + times[i]
+				}
+				sum.add(times[i]);
+				console.log(times[i], times[i].length);
+			}
+
+			console.log(sum.hours() + ":" + sum.minutes() + ":" + sum.seconds());
+		</script>
+	</body>
+</html>

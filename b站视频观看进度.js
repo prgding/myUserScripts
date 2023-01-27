@@ -9,80 +9,94 @@
 // ==/UserScript==
 
 
-setTimeout(
-	function () {
-		let durationElements = document.querySelectorAll('div.duration');
-		let currentPElement = document.querySelector("li.watched.on span.page-num");
-		let text = currentPElement.textContent; // P27
-		let current = parseInt(text.slice(1)); // 27
-		let sum = 0;
-		let left = 0;
-		document.querySelector("#v_desc > div.desc-info.desc-v2").style = "height: auto";
+setTimeout(function () {
+	let durationElements = document.querySelectorAll('div.duration');
+	let currentPElement = document.querySelector("li.watched.on span.page-num");
+	let text = currentPElement.textContent; // P27
+	let current = parseInt(text.slice(1)); // 27
+	let sum = 0;
+	let left = 0;
 
-		console.log("\n\n------------------输出------------------\n\n\n")
+	console.log("\n\n------------------输出------------------\n\n\n")
 
-		// 把时间数据弄进times数组
-		// 把times数组里的时间转换成秒数
-		// 秒数相加 得sum
-		// sum 转换成时分秒
+	// 把时间数据转换成秒数再弄进times数组
+	let times = []
+	for (let i = 0; i < durationElements.length; i++) {
+		let time = durationElements[i].textContent;
+		let parts = time.split(":");
+		let hour = 0;
+		let minute = 0;
+		let second = 0;
+		let seconds = 0;
 
-		for (let i = 0; i < durationElements.length; i++) {
-			let duration = parseInt(durationElements[i].textContent);
-			if (i === 0 || i === durationElements.length - 1) {
-				console.log(i + 1, durationElements[i].textContent);
-			}
-
-			if (i >= current) {
-				// 从第 current + 1 个开始算
-				if (i === current) {
-					console.log(i + 1, durationElements[i].textContent);
-				}
-				left += duration;
-			}
-			sum += duration;
+		if (parts.length === 3) {
+			hour = parseInt(parts[0]);
+			minute = parseInt(parts[1]);
+			second = parseInt(parts[2]);
 		}
-
-		let alreadySeen = sum - left;
-
-		console.log("总时长 ==", sum);
-		// console.log("已看 ==", alreadySeen);
-		// console.log("剩余 ==", left);
-
-		const convertToHoursAndMinutes = (value) => {
-			let hours = Math.floor(value / 60);
-			let minutes = value % 60;
-			if (hours < 10) {
-				hours = `0${hours}`
-			}
-			if (minutes < 10) {
-				minutes = `0${minutes}`
-			}
-			return `${hours} : ${minutes}`;
+		if (parts.length === 2) {
+			minute = parseInt(parts[0]);
+			second = parseInt(parts[1]);
 		}
+		if (parts.length === 1) {
+			second = parseInt(parts[0]);
+		}
+		seconds = 3600 * hour + 60 * minute + second;
 
-		// console.log("格式化总时长 ==", convertToHoursAndMinutes(sum));
-		// console.log("格式化已看 ==", convertToHoursAndMinutes(alreadySeen));
-		// console.log("格式化剩余 ==", convertToHoursAndMinutes(left));
-		//
-		// console.log("已看百分比 ==", (alreadySeen / sum * 100).toFixed(2) + "%");
-		// console.log("已看集数百分比 ==", (current / durationElements.length * 100).toFixed(2) + "%");
+		times.push(seconds)
+	}
+	console.log(times);
 
-		let formatSum = convertToHoursAndMinutes(sum);
-		let formatAlreadySeen = convertToHoursAndMinutes(alreadySeen);
-		let formatLeft = convertToHoursAndMinutes(left);
-		let alreadyPercent = (alreadySeen / sum * 100).toFixed(2) + "%";
-		let episodePercent = (current / durationElements.length * 100).toFixed(2) + "%";
+	// 秒数相加 得sum, left
+	for (let i = 0; i < times.length; i++) {
+		// 输出所有集数
+		// console.log("all", i + 1);
+		sum += times[i];
+		if (i >= current - 1) {
+			// 输出当前集数
+			// console.log("current P", i + 1);
+			left += times[i];
+		}
+	}
 
+	let alreadySeen = sum - left;
 
-		let msg1 = "总时长: " + formatSum + "\n";
-		let msg2 = "已看时长: " + formatAlreadySeen + "&emsp;剩余时长: " + formatLeft + "\n";
-		let msg3 = "已看百分比: " + alreadyPercent + "&emsp;已看集数百分比: " + episodePercent + "\n";
+	// sum,left,alreadySeen 转换成时分秒
+	function toHms(seconds) {
+		let h = Math.floor(seconds / 3600);
+		let m = Math.floor(seconds % 3600 / 60);
+		let s = Math.floor(seconds % 3600 % 60);
+		if (h < 10) {
+			h = `0${h}`;
+		}
+		if (m < 10) {
+			m = `0${m}`;
+		}
+		if (s < 10) {
+			s = `0${s}`;
+		}
+		return `${h}:${m}:${s}`
+	}
 
-		let desc = document.querySelector(".desc-info-text").textContent;
-		document.querySelector(".desc-info-text").innerHTML = msg1 + msg2 + msg3 + desc;
+	let formatSum = toHms(sum);
+	let formatLeft = toHms(left);
+	let formatAlreadySeen = toHms(alreadySeen);
 
-		// console.log(document.querySelector(".desc-info-text").innerText);
+	let alreadyPercent = (alreadySeen / sum * 100).toFixed(2) + "%";
+	let episodePercent = ((current - 1) / times.length * 100).toFixed(2) + "%";
 
-	},
-	3000
-);
+	let msg1 = "总时长: " + formatSum + "\n";
+	let msg2 = "已看时长: " + formatAlreadySeen + "&emsp;剩余时长: " + formatLeft + "\n";
+	let msg3 = "已看百分比: " + alreadyPercent + "&emsp;已看集数百分比: " + episodePercent + "\n";
+	console.log(msg1 + msg2 + msg3);
+
+	let desc_div = document.querySelector("#v_desc > div.desc-info.desc-v2");
+
+	if (desc_div != null) {
+		desc_div.style = "height: auto";
+		let desc_span = document.querySelector(".desc-info-text");
+		let desc = desc_span.textContent;
+		desc_span.innerHTML = msg1 + msg2 + msg3 + desc;
+	}
+
+}, 3000);

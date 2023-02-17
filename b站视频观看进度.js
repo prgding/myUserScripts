@@ -83,11 +83,14 @@ setTimeout(function () {
 	let formatAlreadySeen = toHms(alreadySeen);
 
 	let alreadyPercent = (alreadySeen / sum * 100).toFixed(2) + "%";
+
 	let episodePercent = ((current - 1) / times.length * 100).toFixed(2) + "%";
 
 	let msg1 = "总时长: " + formatSum + "\n";
 	let msg2 = "已看时长: " + formatAlreadySeen + "&emsp;剩余时长: " + formatLeft + "\n";
-	let msg3 = "已看百分比: " + alreadyPercent + "&emsp;已看集数百分比: " + episodePercent + "\n";
+	let msg3 = "已看百分比: " + alreadyPercent + "&emsp;已看集数百分比: " + episodePercent + " ";
+	let msg4 = "<a id='get_full_data'>获取全集数据</a>\n"
+
 	console.log(msg1 + msg2 + msg3);
 
 	let desc_div = document.querySelector("#v_desc > div.desc-info.desc-v2");
@@ -96,7 +99,36 @@ setTimeout(function () {
 		desc_div.style = "height: auto";
 		let desc_span = document.querySelector(".desc-info-text");
 		let desc = desc_span.textContent;
-		desc_span.innerHTML = msg1 + msg2 + msg3 + desc;
+		desc_span.innerHTML = msg1 + msg2 + msg3 + msg4 + desc;
+
+		document.getElementById("get_full_data").onclick = function () {
+			let accumulation_list = [];
+			let epo_list = [];
+			accumulation_list.push(0);
+
+			// 时长百分比
+			let sum = 0;
+			for (let i = 0; i < times.length; i++) {
+				sum += times[i];
+				accumulation_list[i + 1] = sum;
+			}
+
+			// 集数百分比
+			for (let i = 0; i < times.length; i++) {
+				epo_list[i] = i;
+			}
+
+			for (let i = 0; i < times.length; i++) {
+				let percent1 = ((accumulation_list[i]) / sum * 100).toFixed(2) + "%";
+				let percent2 = (epo_list[i] / times.length * 100).toFixed(2) + "%";
+				let p_num;
+				if (i < 9) {
+					p_num = `0${i + 1}`
+				} else p_num = i + 1;
+				console.log(`P${p_num}   ${percent1}   ${percent2}`);
+			}
+		}
 	}
+
 
 }, 3000);

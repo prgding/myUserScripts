@@ -4,6 +4,6 @@
 
 - bilibili_video_viewing_progress.js
 - ChatGPT - Fix Network Error.js
-- CSDN_select&copy.js
+- CSDN_select_copy.js
 - youtube新标签页打开.js
-- chaoxing_select&copy.js
+- chaoxing_select_copy.js

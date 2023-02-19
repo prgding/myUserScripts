@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name         CSDN选中复制
+// @name         CSDN 不登陆复制、取消折叠
 // @namespace    dingshuai
-// @version      1.0
-// @description  CSDN选中复制
+// @version      1.1
+// @description  CSDN 中实现不登陆实现选中和复制；自动展开折叠代码；
 // @author       dingshuai
 // @match        https://blog.csdn.net/*
 // @icon         https://www.google.com/s2/favicons?domain=blog.csdn.net
+// @license 	 MIT
 // ==/UserScript==
 
 onload = function () {

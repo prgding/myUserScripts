@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         学习通选中复制
 // @namespace    dingshuai
-// @version      1.1
+// @version      1.2
 // @description  学习通题目可以选中复制，便于搜索题目
 // @author       dingshuai
 // @match        https://mooc1.chaoxing.com/exam-ans/*
 // @icon         https://www.google.com/s2/favicons?domain=chaoxing.com
+// @github       https://github.com/prgding/myUserScripts
 // @license 	 MIT
 // ==/UserScript==
 

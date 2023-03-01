@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSDN 不登陆复制、取消折叠
 // @namespace    dingshuai
-// @version      1.3
+// @version      1.4
 // @description  CSDN 中实现不登陆实现选中和复制；自动展开折叠代码；
 // @author       dingshuai
 // @match        https://blog.csdn.net/*
@@ -10,7 +10,7 @@
 // @license      MIT
 // ==/UserScript==
 
-onload = function () {
+setTimeout(function () {
 	// 不登陆复制
 	const divs = document.querySelectorAll('div.hljs-button.signin');
 	divs.forEach(div => {
@@ -26,4 +26,4 @@ onload = function () {
 		pre.querySelector("div.hide-preCode-box").remove();
 	})
 
-}
+},3000)

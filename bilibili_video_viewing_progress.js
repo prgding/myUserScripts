@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         b站视频观看进度
 // @namespace    dingshuai
-// @version      1.3
-// @description  在b站作品简介中输出当前观看百分比等信息
+// @version      1.4
+// @description  在b站作品简介中输出当前观看百分比等信息（有分p的视频才会生效）
 // @author       dingshuai
 // @match        https://www.bilibili.com/video/*
 // @icon         https://www.google.com/s2/favicons?domain=bilibili.com
